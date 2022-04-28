@@ -1,19 +1,44 @@
 import static org.junit.Assert.*;
 import org.junit.*;
+// import MarkdownParse.*;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.*;
+
 public class MarkdownParseTest {
-    @Test
-    public void addition() {
-        assertEquals(2, 1 + 1);
-    }
+
+    
 
     @Test
-    //create list of links
-    //use getLinks to see if both are equal
-    public void links(){
+    public void testfile_correct() throws IOException {
         Path fileName = Path.of("test-file.md");
+        String content = Files.readString(fileName);
+        Assert.assertEquals(MarkdownParse.getLinks(content), List.of("https://something.com", "some-thing.html"));
+    }
+
+
+
+    @Test
+    public void testfile_infinite() throws IOException {
+        Path fileName = Path.of("test-file-infinite.md");
         String content = Files.readString(fileName);
         assertEquals(MarkdownParse.getLinks(content), List.of("https://something.com", "some-thing.html"));
     }
-    
 
+    @Test
+    public void testfile_image() throws IOException {
+        Path fileName = Path.of("test-file-image.md");
+        String content = Files.readString(fileName);
+        assertEquals(MarkdownParse.getLinks(content), List.of("some-thing.html"));
+    }
+
+    @Test
+    public void testfile_space() throws IOException {
+        Path fileName = Path.of("test3.md");
+        String content = Files.readString(fileName);
+        assertEquals(MarkdownParse.getLinks(content), List.of("https://something.com"));
+    }
 }
